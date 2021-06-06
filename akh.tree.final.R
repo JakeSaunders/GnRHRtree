@@ -1,14 +1,14 @@
 ### set up environment ----
-setwd("C:/Users/saundecj/Google Drive/fly/AKH review/AKH tree/")
+#setwd("../AKH tree/")
 
 #install.packages("phylotools")
 #install.packages("myTAI")
-# install.packages("taxize")
+#install.packages("taxize")
 library(tidyverse)
 library(Biostrings)
 library(ape)
 library(DECIPHER)
-library('taxize')
+library(taxize)
 library(myTAI)
 library(ggtree)
 
@@ -21,7 +21,6 @@ CrzR <- phylotools::read.fasta("NP_648571.1-dmCrzR.fasta")
 # accession numbers
 df$accession <- sub(pattern = "\\s.*", "", df$seq.name)
 CrzR$accession <- sub(pattern = "\\s.*", "", CrzR$seq.name)
-
 
 # gene name
 df$name <- gsub(
@@ -85,12 +84,11 @@ CrzR$name <- sub(pattern = "corazonin receptor",
                    replacement = "Crz receptor", 
                    x = CrzR$name,ignore.case = T )
 
-### manually generated index determining which sequences to drop ----
 df <- rbind.data.frame(df,CrzR)
 
+### load manually generated index determining which sequences to drop ----
 drop.df <- read.csv("GnRHreceptors.droplist.csv")
 drop.df$include <- as.logical(drop.df$include)
-
 
 df <- left_join(df,drop.df,"accession")
 df <- df[df$include,]
@@ -103,7 +101,7 @@ rm(CrzR,drop.df)
 # get phylum ----
 
 #### Change this entry to your unique key  ####
-key <- readLines("../../../@R/key_entrez.txt")
+key <- readLines("key_entrez.txt")
 rentrez::set_entrez_key(key)
 
 species.info <- lapply(
@@ -130,13 +128,10 @@ species.info <- rbind.data.frame(
                 data.frame(phylum ="Chordata", order ="Perciformes", 
                     family ="Moronidae", species.short ="Morone saxatilis"))
 
-
 #save(species.info,file = "species.info.RData")
 #load("species.info.RData")
 
-
 df$species.short <- stringr::word(df$species, 1, 2)
-
 df <- left_join(df,species.info,by = "species.short")
 
 ### prepare for tree ----
@@ -152,21 +147,9 @@ seqs.align <- AlignSeqs(seqs)
 seqs.dm <- DistanceMatrix(seqs.align)
 seqs.njs <- njs(seqs.dm)
 
-save.image(file = "BeforeTree.2021-0605.v02.RData")
-
-
-
-
 # Make trees ----
-load("BeforeTree.2021-0605.v02.RData")
-
-
 tip_metadata <- df %>% select( tip.name,species.short:family)
 colnames(tip_metadata)[3] <- "Phylum"
-
-p <- ggtree(seqs.njs, branch.length='none', layout='circular') +
-    geom_tiplab2(color="black", offset = 1, align=TRUE,size=1.5) +
-    geom_text2(aes(label=node), hjust=-.3,size = 1,color="darkred") 
 
 p <- ggtree(seqs.njs, branch.length='none', layout='circular') +
     geom_tiplab2(color="black", offset = 1, align=TRUE,size=1.5)
@@ -187,7 +170,4 @@ mp <- p %<+% tip_metadata +
 
 mp <- rotate_tree(mp,-150)
 
-ggsave("GnRHReceptor.tree.v03.pdf",mp,height = 24,width = 24)
-
-# NP_995639.1 AKH receptor C [Drosophila melanogaster]
-# NP_648571.1 corazonin receptor, isoform A [Drosophila melanogaster]
+ggsave("GnRHReceptor.tree.pdf",mp,height = 24,width = 24)
