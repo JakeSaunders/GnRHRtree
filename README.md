@@ -14,4 +14,4 @@ R code and associated files for constructing a cladogram depicting the protein s
 # Works Cited
 
 * G Yu. Using ggtree to visualize data on tree-like structures. Current Protocols in Bioinformatics, 2020, 69:e96. doi: 10.1002/cpbi.96.
-* Wright ES. Using DECIPHER v2.0 to Analyze Big Biological Sequence Data in R. The R Journal, 2016, 8(1), 352-359.
+* ES Wright. Using DECIPHER v2.0 to Analyze Big Biological Sequence Data in R. The R Journal, 2016, 8(1), 352-359.
