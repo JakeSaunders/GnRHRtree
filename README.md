@@ -1,4 +1,7 @@
 # GnRH Receptor Tree
+
+Featured in: JM Nelson, CJ Saunders, EC Johnson. 2021. The intrinsic nutrient sensing adipokinetic hormone producing cells function in modulation of metabolism, activity, and stress. Int. J. Mol. Sci, 22, 7515. doi.org/10.3390/ijms22147515
+
 R code and associated files for constructing a cladogram depicting the protein sequence similarity of Gonadotropin-releasing hormone receptor. The following files are required for constructing the tree:
 
 * **akh.tree.final.R** - R code for constructing cladogram of Gonadotropin-releasing hormone receptors. 
